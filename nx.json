@@ -29,6 +29,9 @@
     "front-e2e": {
       "tags": [],
       "implicitDependencies": ["front"]
+    },
+    "back": {
+      "tags": []
     }
   }
 }
