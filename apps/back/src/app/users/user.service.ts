@@ -11,22 +11,32 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const { cpf } = createUserDto;
+    const userWithSameCPF = await this.usersRepository.findOne({ where: { cpf, isActive: true }})
+    if(userWithSameCPF) {
+      return {} as User;
+    }
     const user = new User(createUserDto)
 
     return this.usersRepository.save(user);
   }
 
   findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+    return this.usersRepository.find({ where: { isActive: true }});
   }
 
-  findOne(id: string): Promise<User> {
-    return this.usersRepository.findOne(id);
+  async findOne(id: string): Promise<User> {
+    const user = await this.usersRepository.findOne({ where: { id, isActive: true } });
+    
+    return user || {} as User
   }
 
   async remove(id: string): Promise<User> {
-    const user = await this.usersRepository.findOne({ where: { id } });
+    const user = await this.usersRepository.findOne({ where: { id, isActive: true } });
+    if(!user) {
+      return {} as User
+    }
     user.isActive = false
 
     return this.usersRepository.save(user)
