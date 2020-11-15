@@ -13,9 +13,9 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const { cpf } = createUserDto;
-    const userWithSameCPF = await this.usersRepository.findOne({ where: { cpf, isActive: true }})
-    if(userWithSameCPF) {
-      return {} as User;
+    const isCPFAlreadyRegistered = await this.usersRepository.findOne({ where: { cpf, isActive: true }})
+    if(isCPFAlreadyRegistered) {
+      return;
     }
     const user = new User(createUserDto)
 
@@ -27,15 +27,13 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<User> {
-    const user = await this.usersRepository.findOne({ where: { id, isActive: true } });
-    
-    return user || {} as User
+    return this.usersRepository.findOne({ where: { id, isActive: true } });
   }
 
   async remove(id: string): Promise<User> {
     const user = await this.usersRepository.findOne({ where: { id, isActive: true } });
     if(!user) {
-      return {} as User
+      return
     }
     user.isActive = false
 
