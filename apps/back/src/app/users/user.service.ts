@@ -12,12 +12,18 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const { cpf } = createUserDto;
-    const isCPFAlreadyRegistered = await this.usersRepository.findOne({ where: { cpf, isActive: true }})
-    if(isCPFAlreadyRegistered) {
+    const { cpf, email } = createUserDto;
+    const isUserAlreadyRegistered = await this.usersRepository.findOne({ where: [{ cpf, isActive: true }, { email, isActive: true }]})
+    if(isUserAlreadyRegistered) {
       return;
     }
-    const user = new User(createUserDto)
+    const user = new User()
+    user.name = createUserDto.name
+    user.cpf = createUserDto.cpf
+    user.phone = createUserDto.phone
+    user.password = createUserDto.password
+    user.email = createUserDto.email
+    user.role = createUserDto.role
 
     return this.usersRepository.save(user);
   }

@@ -1,24 +1,56 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, AfterLoad, BeforeUpdate, BeforeInsert } from 'typeorm';
 import { v4 as uuid } from 'uuid';
+import * as bcrypt from 'bcrypt'
+
+export enum UserRole {
+  ADMIN = "admin",
+  PSYCHOLOGIST = "psychologist",
+  PATIENT = "patient"
+}
+export type UserWithoutPassword = Omit<User, 'isActive' | 'password' | 'tempPassword'>
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string = uuid();
 
-  @Column({ nullable: false })
+  @Column({ length: 255, nullable: false })
   name: string;
 
-  @Column({ length: 11, nullable: false })
+  @Column({ length: 11, nullable: false, unique: true })
   cpf: string;
 
   @Column({ length: 11 })
   phone: string;
 
+  @Column({ nullable: true })
+  password: string;
+
+  @Column({ nullable: true, unique: true })
+  email: string;
+
+  @Column({
+    type: "enum",
+    enum: UserRole,
+    default: UserRole.PATIENT
+  })
+  role: UserRole
+
   @Column({ default: true })
   isActive: boolean;
 
-  constructor(user?: Partial<User>) {
-    return Object.assign({}, this, user)
+  tempPassword: string;
+
+  @AfterLoad()
+  private loadTempPassword(): void {
+    this.tempPassword = this.password;
+  }
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  private encryptPassword(): void {
+    if (this.tempPassword !== this.password) {
+      this.password = bcrypt.hashSync(this.password, 10);
+    }
   }
 }
