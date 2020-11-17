@@ -53,4 +53,8 @@ export class User {
       this.password = bcrypt.hashSync(this.password, 10);
     }
   }
+
+  validatePassword(password: string): boolean {
+    return bcrypt.compareSync(password, this.password)
+  }
 }
