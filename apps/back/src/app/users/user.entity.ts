@@ -1,13 +1,13 @@
 import { Entity, Column, PrimaryGeneratedColumn, AfterLoad, BeforeUpdate, BeforeInsert } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import * as bcrypt from 'bcrypt'
+import { Exclude } from 'class-transformer';
 
 export enum UserRole {
   ADMIN = "admin",
   PSYCHOLOGIST = "psychologist",
   PATIENT = "patient"
 }
-export type UserWithoutPassword = Omit<User, 'isActive' | 'password' | 'tempPassword'>
 
 @Entity()
 export class User {
@@ -24,6 +24,7 @@ export class User {
   phone: string;
 
   @Column({ nullable: true })
+  @Exclude()
   password: string;
 
   @Column({ nullable: true, unique: true })
@@ -37,8 +38,10 @@ export class User {
   role: UserRole
 
   @Column({ default: true })
+  @Exclude()
   isActive: boolean;
 
+  @Exclude()
   tempPassword: string;
 
   @AfterLoad()
