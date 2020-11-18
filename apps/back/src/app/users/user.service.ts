@@ -36,6 +36,10 @@ export class UsersService {
     return this.usersRepository.findOne({ where: { id, isActive: true } });
   }
 
+  async findOneByEmail(email: string): Promise<User> {
+    return this.usersRepository.findOne({ where: { email, isActive: true } });
+  }
+
   async remove(id: string): Promise<User> {
     const user = await this.usersRepository.findOne({ where: { id, isActive: true } });
     if(!user) {
