@@ -1,12 +1,19 @@
-import { Entity, Column, PrimaryGeneratedColumn, AfterLoad, BeforeUpdate, BeforeInsert } from 'typeorm';
-import { v4 as uuid } from 'uuid';
 import * as bcrypt from 'bcrypt'
-import { Exclude } from 'class-transformer';
+import { Exclude } from 'class-transformer'
+import {
+  AfterLoad,
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm'
+import { v4 as uuid } from 'uuid'
 
 export enum UserRole {
-  ADMIN = "admin",
-  PSYCHOLOGIST = "psychologist",
-  PATIENT = "patient"
+  ADMIN = 'admin',
+  PSYCHOLOGIST = 'psychologist',
+  PATIENT = 'patient',
 }
 
 @Entity()
@@ -31,11 +38,11 @@ export class User {
   email: string;
 
   @Column({
-    type: "enum",
+    type: 'enum',
     enum: UserRole,
-    default: UserRole.PATIENT
+    default: UserRole.PATIENT,
   })
-  role: UserRole
+  role: UserRole;
 
   @Column({ default: true })
   @Exclude()
@@ -58,6 +65,6 @@ export class User {
   }
 
   validatePassword(password: string): boolean {
-    return bcrypt.compareSync(password, this.password)
+    return bcrypt.compareSync(password, this.password);
   }
 }

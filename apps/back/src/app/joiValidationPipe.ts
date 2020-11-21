@@ -1,5 +1,5 @@
-import { PipeTransform, Injectable, BadRequestException } from '@nestjs/common';
-import { ObjectSchema } from '@hapi/joi';
+import { ObjectSchema } from '@hapi/joi'
+import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common'
 
 @Injectable()
 export class JoiValidationPipe implements PipeTransform {
@@ -7,7 +7,7 @@ export class JoiValidationPipe implements PipeTransform {
 
   transform(value: unknown) {
     const { error } = this.schema.validate(value);
-    
+
     if (error) {
       throw new BadRequestException('Validation failed');
     }

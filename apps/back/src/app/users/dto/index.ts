@@ -6,5 +6,5 @@ export class CreateUserDto {
   phone: string;
   password: string;
   email: string;
-  role: UserRole
+  role: UserRole;
 }

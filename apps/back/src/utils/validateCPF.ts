@@ -17,15 +17,18 @@ const sumDigits = (values: number[]): number => {
 };
 
 const validateCPF = (rawCpf: string): boolean => {
-  const cpf = formatStringToOnlyNumbers(rawCpf)
+  const cpf = formatStringToOnlyNumbers(rawCpf);
 
-  const isCPFWithSameDigit = /^(\d)\1{10}$/.test(cpf)
+  const isCPFWithSameDigit = /^(\d)\1{10}$/.test(cpf);
   if (cpf === '' || isCPFWithSameDigit || cpf.length !== 11) {
-    return false
+    return false;
   }
 
-  const firstNineDigits = cpf.slice(0, 9).split("").map(Number);
-  const [firstValidationDigit, secondValidationDigit] = cpf.slice(9).split("").map(Number);
+  const firstNineDigits = cpf.slice(0, 9).split('').map(Number);
+  const [firstValidationDigit, secondValidationDigit] = cpf
+    .slice(9)
+    .split('')
+    .map(Number);
 
   const firstNineDigitsSum = sumDigits(firstNineDigits);
   const validateFirstDigit = getValidationDigit(firstNineDigitsSum);
