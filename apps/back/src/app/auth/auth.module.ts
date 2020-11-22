@@ -5,6 +5,7 @@ import { PassportModule } from '@nestjs/passport'
 import { UsersModule } from '../users/user.module'
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
+import { GoogleStrategy } from './google.strategy'
 import { LocalStrategy } from './local.strategy'
 
 @Module({
@@ -16,7 +17,7 @@ import { LocalStrategy } from './local.strategy'
       signOptions: { expiresIn: '60s' },
     }),
   ],
-  providers: [AuthService, LocalStrategy],
+  providers: [AuthService, LocalStrategy, GoogleStrategy],
   controllers: [AuthController],
   exports: [AuthService],
 })

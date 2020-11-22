@@ -20,4 +20,8 @@ export const createUserSchema = Joi.object({
     .email({ tlds: { allow: false } })
     .required(),
   role: Joi.string().valid(UserRole.PATIENT, UserRole.PSYCHOLOGIST),
-});
+  oAuthId: Joi.string(),
+  oAuthProvider: Joi.string(),
+})
+  .with('oAuthId', 'oAuthProvider')
+  .with('oAuthProvider', 'oAuthId');

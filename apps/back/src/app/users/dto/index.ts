@@ -7,4 +7,6 @@ export class CreateUserDto {
   password: string;
   email: string;
   role: UserRole;
+  oAuthId: string;
+  oAuthProvider: string;
 }

@@ -21,13 +21,19 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string = uuid();
 
+  @Column({ nullable: true })
+  oAuthId: string;
+
+  @Column({ nullable: true })
+  oAuthProvider: string;
+
   @Column({ length: 255, nullable: false })
   name: string;
 
   @Column({ length: 11, nullable: false, unique: true })
   cpf: string;
 
-  @Column({ length: 11 })
+  @Column({ length: 11, nullable: false })
   phone: string;
 
   @Column({ nullable: true })

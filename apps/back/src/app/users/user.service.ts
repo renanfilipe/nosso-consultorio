@@ -31,6 +31,8 @@ export class UsersService {
     user.password = createUserDto.password;
     user.email = createUserDto.email;
     user.role = createUserDto.role;
+    user.oAuthId = createUserDto.oAuthId;
+    user.oAuthProvider = createUserDto.oAuthProvider;
 
     return this.usersRepository.save(user);
   }
@@ -45,6 +47,12 @@ export class UsersService {
 
   async findOneByEmail(email: string): Promise<User> {
     return this.usersRepository.findOne({ where: { email, isActive: true } });
+  }
+
+  async findOneByOAuth(oAuthId: string, oAuthProvider: string): Promise<User> {
+    return this.usersRepository.findOne({
+      where: { oAuthId, oAuthProvider, isActive: true },
+    });
   }
 
   async remove(id: string): Promise<User> {
