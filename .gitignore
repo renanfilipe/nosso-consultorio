@@ -39,3 +39,4 @@ testem.log
 Thumbs.db
 
 apps/back/.env
+google_auth_key

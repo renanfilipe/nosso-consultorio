@@ -1,0 +1,43 @@
+version: '3'
+services:
+  postgresql:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: any_pass123
+      POSTGRES_USER: renan_admin
+      POSTGRES_DB: nosso_consultorio
+    ports:
+      - '5432:5432'
+  backend:
+    build:
+      context: .
+      dockerfile: dockerfile.backend
+    environment:
+      DATABASE_HOST: postgresql
+      DATABASE_PORT: 5432
+      DATABASE_USERNAME: renan_admin
+      DATABASE_PASSWORD: any_pass123
+      DATABASE_DATABASE: nosso_consultorio
+      JWT_SECRET: any_secret
+      GOOGLE_CLIENT_ID:
+      GOOGLE_SECRET:
+      GOOGLE_REDIRECT_URI:
+    volumes:
+      - /app/node_modules
+      - ./:/app
+    depends_on:
+      - postgresql
+    ports:
+      - '3333:3333'
+  frontend:
+    build:
+      context: .
+      dockerfile: dockerfile.frontend
+    volumes:
+      - /app/node_modules
+      - ./:/app
+    depends_on:
+      - backend
+    ports:
+      - '4200:4200'
